@@ -1,17 +1,15 @@
 import { useState } from 'react';
+import { usePrivy } from '@privy-io/react-auth';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Shield, Wallet } from 'lucide-react';
 import cryptoLockIcon from '@/assets/crypto-lock-icon.png';
 
-interface NavigationProps {
-  onConnectWallet?: () => void;
-  walletConnected?: boolean;
-  walletAddress?: string;
-}
+interface NavigationProps {}
 
-export const Navigation = ({ onConnectWallet, walletConnected, walletAddress }: NavigationProps) => {
+export const Navigation = ({}: NavigationProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { ready, authenticated, user, login, logout } = usePrivy();
 
   const navLinks = [
     { label: 'How it Works', href: '#technology' },
@@ -56,16 +54,28 @@ export const Navigation = ({ onConnectWallet, walletConnected, walletAddress }: 
 
           {/* Wallet Connection */}
           <div className="flex items-center space-x-4">
-            {walletConnected && walletAddress ? (
+            {ready && authenticated && user ? (
               <div className="hidden sm:flex items-center space-x-2 glass-card px-3 py-2">
                 <Wallet className="w-4 h-4 text-primary" />
                 <span className="text-sm font-mono">
-                  {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                  {user.wallet?.address ? 
+                    `${user.wallet.address.slice(0, 6)}...${user.wallet.address.slice(-4)}` : 
+                    'Connected'
+                  }
                 </span>
+                <Button 
+                  onClick={logout}
+                  variant="ghost"
+                  size="sm"
+                  className="ml-2 h-6 text-xs"
+                >
+                  Disconnect
+                </Button>
               </div>
             ) : (
               <Button 
-                onClick={onConnectWallet}
+                onClick={login}
+                disabled={!ready}
                 className="bg-gradient-web3 hover-scale"
                 size="sm"
               >
@@ -92,12 +102,13 @@ export const Navigation = ({ onConnectWallet, walletConnected, walletAddress }: 
                     <NavContent />
                   </div>
 
-                  {!walletConnected && (
+                  {!authenticated && (
                     <Button 
                       onClick={() => {
-                        onConnectWallet?.();
+                        login();
                         setMobileMenuOpen(false);
                       }}
+                      disabled={!ready}
                       className="bg-gradient-web3 w-full"
                     >
                       <Wallet className="w-4 h-4 mr-2" />

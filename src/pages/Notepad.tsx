@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { usePrivy } from '@privy-io/react-auth';
 import { motion } from 'framer-motion';
 import CryptoJS from 'crypto-js';
 import { Button } from '@/components/ui/button';
@@ -26,13 +27,12 @@ import {
 const Notepad = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { ready, authenticated, user, login } = usePrivy();
   
   const [encryptionKey, setEncryptionKey] = useState('');
   const [noteContent, setNoteContent] = useState('');
   const [encryptedContent, setEncryptedContent] = useState('');
   const [isEncrypted, setIsEncrypted] = useState(false);
-  const [walletConnected, setWalletConnected] = useState(false);
-  const [walletAddress, setWalletAddress] = useState('');
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -42,13 +42,6 @@ const Notepad = () => {
     if (tempKey) {
       setEncryptionKey(tempKey);
       sessionStorage.removeItem('tempEncryptionKey');
-    }
-
-    // Simulate wallet connection check
-    const connected = localStorage.getItem('walletConnected');
-    if (connected) {
-      setWalletConnected(true);
-      setWalletAddress('0x742d35Cc6bF3A8c3bCf3654E64b1fc7BA7A92A39');
     }
   }, []);
 
@@ -142,6 +135,15 @@ const Notepad = () => {
       return;
     }
 
+    if (!authenticated) {
+      toast({
+        title: "Connect wallet first",
+        description: "Please connect your wallet to save to blockchain.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setSaving(true);
     
     // Simulate blockchain save
@@ -166,6 +168,15 @@ const Notepad = () => {
   };
 
   const handleLoadFromBlockchain = async () => {
+    if (!authenticated) {
+      toast({
+        title: "Connect wallet first",
+        description: "Please connect your wallet to load from blockchain.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setLoading(true);
     
     // Simulate blockchain load
@@ -194,16 +205,6 @@ const Notepad = () => {
     setLoading(false);
   };
 
-  const handleConnectWallet = () => {
-    setWalletConnected(true);
-    setWalletAddress('0x742d35Cc6bF3A8c3bCf3654E64b1fc7BA7A92A39');
-    localStorage.setItem('walletConnected', 'true');
-    
-    toast({
-      title: "Wallet connected",
-      description: "You can now save notes to the blockchain.",
-    });
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -229,16 +230,20 @@ const Notepad = () => {
             </div>
 
             <div className="flex items-center space-x-4">
-              {walletConnected ? (
+              {ready && authenticated && user ? (
                 <div className="flex items-center space-x-2 glass-card px-3 py-2">
                   <Wallet className="w-4 h-4 text-primary" />
                   <span className="text-sm font-mono">
-                    {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                    {user.wallet?.address ? 
+                      `${user.wallet.address.slice(0, 6)}...${user.wallet.address.slice(-4)}` : 
+                      'Connected'
+                    }
                   </span>
                 </div>
               ) : (
                 <Button 
-                  onClick={handleConnectWallet}
+                  onClick={login}
+                  disabled={!ready}
                   className="bg-gradient-web3 hover-scale"
                   size="sm"
                 >
@@ -364,7 +369,7 @@ const Notepad = () => {
                 <div className="space-y-4">
                   <Button
                     onClick={handleSaveToBlockchain}
-                    disabled={!encryptedContent || !walletConnected || saving}
+                    disabled={!encryptedContent || !authenticated || saving}
                     className="w-full bg-gradient-web3 hover-scale"
                   >
                     {saving ? (
@@ -383,7 +388,7 @@ const Notepad = () => {
                   <Button
                     onClick={handleLoadFromBlockchain}
                     variant="outline"
-                    disabled={!walletConnected || loading}
+                    disabled={!authenticated || loading}
                     className="w-full"
                   >
                     {loading ? (
@@ -404,8 +409,8 @@ const Notepad = () => {
                 <div className="space-y-3 pt-4 border-t border-border">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Wallet Status</span>
-                    <Badge variant={walletConnected ? "default" : "secondary"}>
-                      {walletConnected ? "Connected" : "Disconnected"}
+                    <Badge variant={authenticated ? "default" : "secondary"}>
+                      {authenticated ? "Connected" : "Disconnected"}
                     </Badge>
                   </div>
                   
