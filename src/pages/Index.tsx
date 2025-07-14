@@ -1,12 +1,33 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import { Navigation } from '@/components/Navigation';
+import { HeroSection } from '@/components/HeroSection';
+import { TechnologySection } from '@/components/TechnologySection';
+import { FeaturesSection } from '@/components/FeaturesSection';
+import { PolicySection } from '@/components/PolicySection';
+import { Footer } from '@/components/Footer';
 
 const Index = () => {
+  const [walletConnected, setWalletConnected] = useState(false);
+  const [walletAddress, setWalletAddress] = useState<string>('');
+
+  const handleConnectWallet = () => {
+    // Simulate wallet connection for demo
+    setWalletConnected(true);
+    setWalletAddress('0x742d35Cc6bF3A8c3bCf3654E64b1fc7BA7A92A39');
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Navigation 
+        onConnectWallet={handleConnectWallet}
+        walletConnected={walletConnected}
+        walletAddress={walletAddress}
+      />
+      <HeroSection />
+      <TechnologySection />
+      <FeaturesSection />
+      <PolicySection />
+      <Footer />
     </div>
   );
 };
