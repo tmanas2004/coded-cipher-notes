@@ -126,7 +126,14 @@ const Notepad = () => {
   };
 
   const handleSaveToBlockchain = async () => {
+    console.log('Save to blockchain clicked', { 
+      encryptedContent: !!encryptedContent, 
+      authenticated, 
+      encryptedContentLength: encryptedContent?.length || 0 
+    });
+    
     if (!encryptedContent) {
+      console.log('No encrypted content available');
       toast({
         title: "Encrypt first",
         description: "Please encrypt your note before saving to blockchain.",
@@ -136,6 +143,7 @@ const Notepad = () => {
     }
 
     if (!authenticated) {
+      console.log('User not authenticated');
       toast({
         title: "Connect wallet first",
         description: "Please connect your wallet to save to blockchain.",
@@ -144,27 +152,38 @@ const Notepad = () => {
       return;
     }
 
+    console.log('Starting blockchain save process');
     setSaving(true);
     
-    // Simulate blockchain save
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Store in localStorage for demo
-    const noteData = {
-      id: Date.now().toString(),
-      content: encryptedContent,
-      timestamp: new Date().toISOString(),
-      hash: CryptoJS.SHA256(encryptedContent).toString()
-    };
-    
-    localStorage.setItem('savedNote', JSON.stringify(noteData));
-    
-    setSaving(false);
-    
-    toast({
-      title: "Note saved to blockchain",
-      description: "Your encrypted note has been stored securely.",
-    });
+    try {
+      // Simulate blockchain save
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Store in localStorage for demo
+      const noteData = {
+        id: Date.now().toString(),
+        content: encryptedContent,
+        timestamp: new Date().toISOString(),
+        hash: CryptoJS.SHA256(encryptedContent).toString()
+      };
+      
+      localStorage.setItem('savedNote', JSON.stringify(noteData));
+      console.log('Note saved successfully', noteData);
+      
+      toast({
+        title: "Note saved to blockchain",
+        description: "Your encrypted note has been stored securely.",
+      });
+    } catch (error) {
+      console.error('Error saving to blockchain:', error);
+      toast({
+        title: "Save failed",
+        description: "Failed to save to blockchain. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleLoadFromBlockchain = async () => {
