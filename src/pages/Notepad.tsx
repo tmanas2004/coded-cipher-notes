@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 
 const Notepad = () => {
+  console.log('New Notepad component loaded - Auto-encryption version');
   const navigate = useNavigate();
   const { toast } = useToast();
   const { ready, authenticated, user, login } = usePrivy();
@@ -29,6 +30,8 @@ const Notepad = () => {
   const [isNotepadOpen, setIsNotepadOpen] = useState(false);
   const [noteContent, setNoteContent] = useState('');
   const [saving, setSaving] = useState(false);
+  
+  console.log('Notepad state:', { isNotepadOpen, hasKey: !!encryptionKey });
 
   useEffect(() => {
     // Get temporary encryption key from session storage
@@ -214,7 +217,7 @@ const Notepad = () => {
                   <span>Enter Encryption Key</span>
                 </CardTitle>
                 <p className="text-sm text-muted-foreground mt-2">
-                  Enter your encryption key to open your secure notepad
+                  Enter your encryption key to open your secure notepad with auto-encryption
                 </p>
               </CardHeader>
               <CardContent className="space-y-6">
