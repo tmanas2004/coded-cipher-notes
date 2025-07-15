@@ -8,62 +8,62 @@ All colors MUST be HSL for proper theme support.
 
 @layer base {
   :root {
-    /* Core brand colors */
-    --background: 0 0% 100%;
-    --foreground: 210 22% 22%;
+    /* Neon Black Theme - Core colors */
+    --background: 0 0% 6%;
+    --foreground: 0 0% 95%;
 
-    /* Web3 gradient colors */
-    --web3-teal-dark: 180 100% 25%;
-    --web3-teal: 180 84% 45%; 
-    --web3-blue: 214 100% 59%;
-    --web3-purple: 258 90% 66%;
-    --web3-orange: 33 100% 50%;
+    /* Neon accent colors */
+    --web3-teal-dark: 180 100% 30%;
+    --web3-teal: 180 100% 50%; 
+    --web3-blue: 200 100% 60%;
+    --web3-purple: 280 100% 70%;
+    --web3-orange: 30 100% 60%;
 
-    /* Card system */
-    --card: 0 0% 100%;
-    --card-foreground: 210 22% 22%;
+    /* Card system - dark with neon glow */
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 22% 22%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 95%;
 
-    /* Primary system - web3 teal */
-    --primary: 180 84% 45%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary system - neon cyan */
+    --primary: 180 100% 50%;
+    --primary-foreground: 0 0% 6%;
 
-    /* Secondary system */
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 210 22% 22%;
+    /* Secondary system - dark with subtle glow */
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 85%;
 
     /* Muted system */
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
 
-    /* Accent system - web3 blue */
-    --accent: 214 100% 59%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent system - neon blue */
+    --accent: 200 100% 60%;
+    --accent-foreground: 0 0% 6%;
 
-    /* Orange accent for special sections */
-    --orange-accent: 33 100% 50%;
-    --orange-foreground: 0 0% 100%;
+    /* Orange accent - neon orange */
+    --orange-accent: 30 100% 60%;
+    --orange-foreground: 0 0% 6%;
 
-    /* Destructive system */
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
+    /* Destructive system - neon red */
+    --destructive: 0 100% 60%;
+    --destructive-foreground: 0 0% 95%;
 
-    /* Border and input system */
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 180 84% 45%;
+    /* Border and input system - subtle neon glow */
+    --border: 0 0% 20%;
+    --input: 0 0% 12%;
+    --ring: 180 100% 50%;
 
-    /* Gradients */
-    --gradient-web3: linear-gradient(135deg, hsl(var(--web3-teal-dark)), hsl(var(--web3-teal)), hsl(var(--web3-blue)));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--web3-teal-dark) / 0.95), hsl(var(--web3-teal) / 0.9), hsl(var(--web3-blue) / 0.85));
-    --gradient-card: linear-gradient(145deg, hsl(var(--card) / 0.9), hsl(var(--card) / 0.95));
+    /* Neon gradients */
+    --gradient-web3: linear-gradient(135deg, hsl(var(--web3-teal)) 0%, hsl(var(--web3-blue)) 50%, hsl(var(--web3-purple)) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(0 0% 6%) 0%, hsl(var(--web3-teal) / 0.1) 50%, hsl(var(--web3-blue) / 0.1) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(0 0% 10%) 100%);
 
-    /* Shadows */
-    --shadow-web3: 0 20px 40px -12px hsl(var(--web3-teal) / 0.25);
-    --shadow-card: 0 4px 6px -1px hsl(210 22% 22% / 0.1), 0 2px 4px -1px hsl(210 22% 22% / 0.06);
-    --shadow-glass: 0 8px 32px hsl(0 0% 0% / 0.1);
+    /* Neon shadows and glows */
+    --shadow-web3: 0 0 30px hsl(var(--web3-teal) / 0.4), 0 0 60px hsl(var(--web3-blue) / 0.2);
+    --shadow-card: 0 0 20px hsl(var(--primary) / 0.15), 0 4px 20px hsl(0 0% 0% / 0.5);
+    --shadow-glass: 0 8px 32px hsl(0 0% 0% / 0.3), 0 0 20px hsl(var(--accent) / 0.1);
 
     /* Animation variables */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -209,12 +209,22 @@ All colors MUST be HSL for proper theme support.
     -webkit-text-fill-color: transparent;
   }
 
-  /* Grid patterns for blockchain aesthetic */
+  /* Neon grid patterns */
   .grid-pattern {
     background-image: 
-      linear-gradient(rgba(120, 119, 198, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(120, 119, 198, 0.05) 1px, transparent 1px);
+      linear-gradient(hsl(var(--web3-teal) / 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--web3-teal) / 0.1) 1px, transparent 1px);
     background-size: 20px 20px;
+  }
+
+  /* Neon border effects */
+  .neon-border {
+    border: 1px solid hsl(var(--primary) / 0.3);
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.2), inset 0 0 10px hsl(var(--primary) / 0.1);
+  }
+
+  .neon-glow {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.4), 0 0 40px hsl(var(--accent) / 0.3);
   }
 }
 
